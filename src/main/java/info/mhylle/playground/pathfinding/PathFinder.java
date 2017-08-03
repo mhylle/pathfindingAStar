@@ -18,6 +18,8 @@ public class PathFinder
   
   private Tile startTile;
   private Tile targetTile;
+  private Visualizer visualizer;
+  
   public PathFinder()
   {
     openList = new ArrayList<>();
@@ -39,14 +41,15 @@ public class PathFinder
     startTile = tiles[0][0];
     Tile[] endRow = tiles[tiles.length - 1];
     targetTile = endRow[endRow.length-1];
-    Visualizer v = new Visualizer(level);
-    v.show();
+    visualizer = new Visualizer(level);
+    visualizer.show();
     generatePath();
   }
   
   private void generatePath()
   {
-    Tile[][] tiles = level.getTiles();
-    openList.add(tiles[0][0]);
+    AStarFinder aStarFinder = new AStarFinder();
+    List<Tile> path = aStarFinder.findPath(1, 1, 20, 20, level);
+    visualizer.showPath(path);
   }
 }

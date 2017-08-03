@@ -9,6 +9,11 @@ public class Tile
   int depth;
   boolean blocked = false;
   
+  boolean opened;
+  double g;
+  double f;
+  Tile parent;
+  
   boolean allowDiagonals = true;
   int[][] neighbours = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
   
