@@ -4,6 +4,12 @@ import java.util.*;
 
 import info.mhylle.playground.pathfinding.haa.*;
 
+/**
+ * Test implementations of different pathfinding algorithms:
+ * Sites that help:
+ * http://theory.stanford.edu/~amitp/GameProgramming/ImplementationNotes.html#source-code-and-demos
+ * https://github.com/qiao/PathFinding.js
+ */
 public class PathFinder
 {
   private List<Tile> openList;
