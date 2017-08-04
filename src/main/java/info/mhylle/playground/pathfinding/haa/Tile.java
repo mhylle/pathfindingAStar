@@ -15,19 +15,22 @@ public class Tile
   Tile parent;
   
   boolean allowDiagonals = true;
-  int[][] neighbours = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
-  
-  private void calculateNeighbours()
-  {
-    for (int i = 0; i < (allowDiagonals ? 8 : 4); ++i) {
-      if (x + neighbours[i][0] < 0 || x + neighbours[i][0] > 19) {
-        continue;
-      }
-      if (y + neighbours[i][1] < 0 || y + neighbours[i][1] > 19) {
-        continue;
-      }
-      
-      
-    }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Tile tile = (Tile) o;
+
+    if (x != tile.x) return false;
+    return y == tile.y;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = x;
+    result = 31 * result + y;
+    return result;
   }
 }
