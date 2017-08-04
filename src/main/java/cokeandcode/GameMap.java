@@ -101,18 +101,18 @@ public class GameMap implements TileBasedMap {
                 return 10000;
             }
             if (terrainType.equals(TerrainType.GRASS)) {
-                return 2;
+                return 5;
             }
 
             if (terrainType.equals(TerrainType.TREES)) {
-                return 4;
+                return 6;
             }
             if (terrainType.equals(TerrainType.WATER)) {
                 return 8;
             }
 
         }
-        return 1;
+        return 2;
     }
 
     public int getHeightInTiles() {
