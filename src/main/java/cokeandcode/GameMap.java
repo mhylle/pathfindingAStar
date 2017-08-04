@@ -2,8 +2,8 @@ package cokeandcode;
 
 public class GameMap implements TileBasedMap {
 
-    public static final int WIDTH = 30;
-    public static final int HEIGHT = 30;
+    private static final int WIDTH = 30;
+    private static final int HEIGHT = 30;
 
     enum TerrainType {
         GRASS, WATER, TREES, PLANE, BOAT, TANK
@@ -14,7 +14,7 @@ public class GameMap implements TileBasedMap {
 
     private boolean[][] visited = new boolean[WIDTH][HEIGHT];
 
-    public GameMap() {
+    GameMap() {
 
         fillArea(0,0,5,5,TerrainType.WATER);
         fillArea(0,5,3,10,TerrainType.WATER);
@@ -40,7 +40,7 @@ public class GameMap implements TileBasedMap {
         }
     }
 
-    public void clearVisited() {
+    void clearVisited() {
         for  (int x = 0; x <getWidthInTiles();x++) {
             for (int y = 0; y < getHeightInTiles(); y++) {
                 visited[x][y] = false;
@@ -52,24 +52,24 @@ public class GameMap implements TileBasedMap {
         return visited[x][y];
     }
 
-    public TerrainType getTerrain(int x, int y){
+    TerrainType getTerrain(int x, int y){
         return terrain[x][y];
     }
 
-    public TerrainType getUnit(int x, int y) {
+    TerrainType getUnit(int x, int y) {
         return units[x][y];
     }
 
-    public void setUnit(int x, int y, TerrainType unit) {
+    void setUnit(int x, int y, TerrainType unit) {
         units[x][y] = unit;
     }
 
     public boolean blocked(Mover mover, int x, int y) {
-        if (getUnit(x,y) != null) {
+        if (getUnit(x, y) != null) {
             return true;
         }
 
-        TerrainType unit = ((UnitMover)mover).getType();
+        TerrainType unit = ((UnitMover) mover).getType();
 
         if (unit == TerrainType.PLANE) {
             return false;
@@ -79,11 +79,8 @@ public class GameMap implements TileBasedMap {
             return terrain[x][y] != TerrainType.GRASS;
         }
 
-        if (unit == TerrainType.BOAT) {
-            return terrain[x][y] != TerrainType.WATER;
-        }
+        return unit != TerrainType.BOAT || terrain[x][y] != TerrainType.WATER;
 
-        return true;
     }
 
     public float getCost(Mover mover, int sx, int sy, int tx, int ty) {

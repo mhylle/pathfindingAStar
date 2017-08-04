@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Path {
+class Path {
     private List<Step> steps = new ArrayList();
     int getLength() {
         return steps.size();
     }
 
-    Step getStep(int index) {
+    private Step getStep(int index) {
         return steps.get(index);
     }
 
@@ -38,7 +38,7 @@ public class Path {
         private int x;
         private int y;
 
-        public Step(int x, int y) {
+        Step(int x, int y) {
             this.x = x;
             this.y = y;
         }

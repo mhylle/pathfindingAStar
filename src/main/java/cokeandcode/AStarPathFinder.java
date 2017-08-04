@@ -6,8 +6,8 @@ import java.util.List;
 
 public class AStarPathFinder implements PathFinder {
 
-    private List closed = new ArrayList();
-    private SortedList opened = new SortedList();
+    private List<Node> closed = new ArrayList<>();
+    private SortedList open = new SortedList();
 
     private TileBasedMap map;
     private int maxSearchDistance;
@@ -17,11 +17,11 @@ public class AStarPathFinder implements PathFinder {
     private AStarHeuristic heuristic;
 
 
-    public AStarPathFinder(TileBasedMap map, int maxSearchDistance, boolean allowDiagonalMovement) {
+    AStarPathFinder(TileBasedMap map, int maxSearchDistance, boolean allowDiagonalMovement) {
         this(map, maxSearchDistance, allowDiagonalMovement, new ClosestHeuristic());
     }
 
-    public AStarPathFinder(TileBasedMap map, int maxSearchDistance, boolean allowDiagonalMovement, AStarHeuristic heuristic) {
+    private AStarPathFinder(TileBasedMap map, int maxSearchDistance, boolean allowDiagonalMovement, AStarHeuristic heuristic) {
         this.heuristic = heuristic;
         this.map = map;
         this.maxSearchDistance = maxSearchDistance;
@@ -45,19 +45,19 @@ public class AStarPathFinder implements PathFinder {
         nodes[sx][sy].cost = 0;
         nodes[sx][sy].depth = 0;
         closed.clear();
-        opened.clear();
-        opened.add(nodes[sx][sy]);
+        open.clear();
+        open.add(nodes[sx][sy]);
         nodes[tx][ty].parent = null;
 
         int maxDepth = 0;
 
-        while ((maxDepth < maxSearchDistance) && opened.size() != 0) {
-            Node currentNode = getFirstInOpened();
+        while ((maxDepth < maxSearchDistance) && open.size() != 0) {
+            Node currentNode = getFirstInOpen();
             if (currentNode == nodes[tx][ty]) {
                 break;
             }
 
-            removeFromOpened(currentNode);
+            removeFromOpen(currentNode);
             addToClosed(currentNode);
 
             for (int x = -1; x < 2; x++) {
@@ -82,19 +82,19 @@ public class AStarPathFinder implements PathFinder {
                         map.pathFinderVisited(xp, yp);
 
                         if (nextStepCost < neighbour.cost) {
-                            if (inOpenedList(neighbour)) {
-                                removeFromOpened(neighbour);
+                            if (inOpenList(neighbour)) {
+                                removeFromOpen(neighbour);
                             }
                             if (inClosedList(neighbour)) {
                                 removeFromClosed(neighbour);
                             }
                         }
 
-                        if (!inOpenedList(neighbour) && !inClosedList(neighbour)) {
+                        if (!inOpenList(neighbour) && !inClosedList(neighbour)) {
                             neighbour.cost = nextStepCost;
                             neighbour.heuristic = getHeuristicCose(mover, xp, yp, tx, ty);
                             maxDepth = Math.max(maxDepth, neighbour.setParent(currentNode));
-                            addToOpened(neighbour);
+                            addToOpen(neighbour);
                         }
                     }
                 }
@@ -114,36 +114,36 @@ public class AStarPathFinder implements PathFinder {
         return path;
     }
 
-    protected Node getFirstInOpened() {
-        return (Node) opened.first();
+    private Node getFirstInOpen() {
+        return open.first();
     }
 
-    private void addToOpened(Node node) {
-        opened.add(node);
+    private void addToOpen(Node node) {
+        open.add(node);
     }
 
-    protected boolean inOpenedList(Node node) {
-        return opened.contains(node);
+    private boolean inOpenList(Node node) {
+        return open.contains(node);
     }
 
-    protected void removeFromOpened(Node node) {
-        opened.remove(node);
+    private void removeFromOpen(Node node) {
+        open.remove(node);
     }
 
-    protected void addToClosed(Node node) {
+    private void addToClosed(Node node) {
         closed.add(node);
     }
 
 
-    protected boolean inClosedList(Node node) {
+    private boolean inClosedList(Node node) {
         return closed.contains(node);
     }
 
-    protected void removeFromClosed(Node node) {
+    private void removeFromClosed(Node node) {
         closed.remove(node);
     }
 
-    protected boolean isValidLocation(Mover mover, int sx, int sy, int x, int y) {
+    private boolean isValidLocation(Mover mover, int sx, int sy, int x, int y) {
         boolean invalid = (x < 0) || (y < 0) || (x > map.getWidthInTiles()) || (y > map.getHeightInTiles());
         if ((!invalid) && ((sx != x) || (sy != y))) {
             invalid = map.blocked(mover, x, y);
@@ -151,40 +151,40 @@ public class AStarPathFinder implements PathFinder {
         return !invalid;
     }
 
-    public float getMovementCost(Mover mover, int sx, int sy, int tx, int ty) {
+    private float getMovementCost(Mover mover, int sx, int sy, int tx, int ty) {
         return map.getCost(mover, sx, sy, tx, ty);
     }
 
-    public float getHeuristicCose(Mover mover, int x, int y, int tx, int ty) {
+    private float getHeuristicCose(Mover mover, int x, int y, int tx, int ty) {
         return heuristic.getCost(map, mover, x, y, tx, ty);
     }
 
 
     private class SortedList {
-        private List list = new ArrayList();
+        private List<Node> list = new ArrayList<>();
 
-        public Object first() {
+        Node first() {
             return list.get(0);
         }
 
-        public void clear() {
+        void clear() {
             list.clear();
         }
 
-        public void add(Object o) {
+        void add(Node o) {
             list.add(o);
             Collections.sort(list);
         }
 
-        public void remove(Object o) {
+        void remove(Node o) {
             list.remove(o);
         }
 
-        public int size() {
+        int size() {
             return list.size();
         }
 
-        public boolean contains(Object o) {
+        boolean contains(Node o) {
             return list.contains(o);
         }
     }
@@ -197,12 +197,12 @@ public class AStarPathFinder implements PathFinder {
         private float heuristic;
         private int depth;
 
-        public Node(int x, int y) {
+        Node(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
-        public int setParent(Node parent) {
+        int setParent(Node parent) {
             depth = parent.depth + 1;
             this.parent = parent;
             return depth;

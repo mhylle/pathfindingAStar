@@ -11,8 +11,8 @@ public class PathTest extends JFrame {
     private PathFinder finder;
     private Path path;
 
-    private int selectedx = -1;
-    private int selectedy = -1;
+    private int selectedX = -1;
+    private int selectedY = -1;
     private int lastFindX = -1;
     private int lastFindY = -1;
 
@@ -21,7 +21,7 @@ public class PathTest extends JFrame {
     /** The offscreen buffer used for rendering in the wonder world of Java 2D */
     private Image buffer;
 
-    public PathTest() {
+    private PathTest() {
         super(("Path finding Example"));
 
         // create tiles..
@@ -74,11 +74,11 @@ public class PathTest extends JFrame {
             return;
         }
 
-        if (selectedx != -1) {
+        if (selectedX != -1) {
             if ((lastFindX != x) ||(lastFindY != y)) {
                 lastFindX = x;
                 lastFindY = y;
-                path = finder.findPath(new UnitMover(map.getUnit(selectedx, selectedy)), selectedx, selectedy, x,y );
+                path = finder.findPath(new UnitMover(map.getUnit(selectedX, selectedY)), selectedX, selectedY, x,y );
                 repaint(0);
             }
         }
@@ -99,22 +99,22 @@ public class PathTest extends JFrame {
 
         if (map.getUnit(x, y) != null) {
             System.out.println("Found unit at " + x + ", " + y);
-            selectedx = x;
-            selectedy = y;
+            selectedX = x;
+            selectedY = y;
             lastFindX = - 1;
         } else {
-            if (selectedx != -1) {
+            if (selectedX != -1) {
                 map.clearVisited();
-                path = finder.findPath(new UnitMover(map.getUnit(selectedx, selectedy)),
-                        selectedx, selectedy, x, y);
+                path = finder.findPath(new UnitMover(map.getUnit(selectedX, selectedY)),
+                        selectedX, selectedY, x, y);
 
                 if (path != null) {
                     path = null;
-                    GameMap.TerrainType unit = map.getUnit(selectedx, selectedy);
-                    map.setUnit(selectedx, selectedy, null);
+                    GameMap.TerrainType unit = map.getUnit(selectedX, selectedY);
+                    map.setUnit(selectedX, selectedY, null);
                     map.setUnit(x,y,unit);
-                    selectedx = x;
-                    selectedy = y;
+                    selectedX = x;
+                    selectedY = y;
                     lastFindX = - 1;
                 }
             }
@@ -152,12 +152,12 @@ public class PathTest extends JFrame {
             }
         }
 
-        if (selectedx != -1) {
+        if (selectedX != -1) {
             g.setColor(Color.black);
-            g.drawRect(selectedx*16, selectedy*16, 15, 15);
-            g.drawRect((selectedx*16)-2, (selectedy*16)-2, 19, 19);
+            g.drawRect(selectedX *16, selectedY *16, 15, 15);
+            g.drawRect((selectedX *16)-2, (selectedY *16)-2, 19, 19);
             g.setColor(Color.white);
-            g.drawRect((selectedx*16)-1, (selectedy*16)-1, 17, 17);
+            g.drawRect((selectedX *16)-1, (selectedY *16)-1, 17, 17);
         }
         graphics.drawImage(buffer, 0, 0, null);
     }

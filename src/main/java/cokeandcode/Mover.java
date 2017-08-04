@@ -1,4 +1,4 @@
 package cokeandcode;
 
-public interface Mover {
+interface Mover {
 }
