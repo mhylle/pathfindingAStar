@@ -16,20 +16,31 @@ public class GameMap implements TileBasedMap {
 
     GameMap() {
 
-        fillArea(0,0,5,5,TerrainType.WATER);
-        fillArea(0,5,3,10,TerrainType.WATER);
-        fillArea(0,15,7,15,TerrainType.WATER);
-        fillArea(7,26,22,4,TerrainType.WATER);
+        fillArea(0,0,5,20,TerrainType.GRASS);
+        fillArea(5,5,5,5,TerrainType.GRASS);
+        fillArea(10,10,5,5,TerrainType.GRASS);
+        fillArea(15,10,5,5,TerrainType.GRASS);
+        fillArea(20,10,5,5,TerrainType.GRASS);
 
-        fillArea(17,5,10,3,TerrainType.TREES);
-        fillArea(20,8,5,3,TerrainType.TREES);
-        fillArea(8,2,7,3,TerrainType.TREES);
-        fillArea(10,5,3,3,TerrainType.TREES);
-        fillArea(10,5,3,3,TerrainType.TREES);
+        fillArea(21,7,3,3,TerrainType.TREES);
+//        fillArea(21,5,2,2,TerrainType.GRASS);
+        fillArea(17,5,6,2,TerrainType.GRASS);
+        fillArea(17,7,2,3,TerrainType.GRASS);
 
-        units[15][15] = TerrainType.TANK;
-        units[2][7] = TerrainType.BOAT;
-        units[20][25] = TerrainType.PLANE;
+//        fillArea(20,5,5,5,TerrainType.GRASS);
+//        fillArea(0,5,3,10,TerrainType.WATER);
+//        fillArea(0,15,7,15,TerrainType.WATER);
+//        fillArea(7,26,22,4,TerrainType.WATER);
+//
+//        fillArea(17,5,10,3,TerrainType.TREES);
+//        fillArea(20,8,5,3,TerrainType.TREES);
+//        fillArea(8,2,7,3,TerrainType.TREES);
+//        fillArea(10,5,3,3,TerrainType.TREES);
+//        fillArea(10,5,3,3,TerrainType.TREES);
+
+        units[23][7] = TerrainType.PLANE;
+//        units[2][7] = TerrainType.BOAT;
+//        units[20][25] = TerrainType.PLANE;
     }
 
     private void fillArea(int x, int y, int width, int height, TerrainType type) {
@@ -84,6 +95,23 @@ public class GameMap implements TileBasedMap {
     }
 
     public float getCost(Mover mover, int sx, int sy, int tx, int ty) {
+        if (terrain[sx] != null) {
+            TerrainType terrainType = terrain[sx][sy];
+            if (terrainType == null) {
+                return 10000;
+            }
+            if (terrainType.equals(TerrainType.GRASS)) {
+                return 2;
+            }
+
+            if (terrainType.equals(TerrainType.TREES)) {
+                return 4;
+            }
+            if (terrainType.equals(TerrainType.WATER)) {
+                return 8;
+            }
+
+        }
         return 1;
     }
 
